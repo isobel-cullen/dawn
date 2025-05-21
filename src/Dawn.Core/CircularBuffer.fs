@@ -25,15 +25,25 @@ type CircularBuffer<'a> (capacity) =
         // unchecked addition
         version <- Microsoft.FSharp.Core.Operators.(+) version 1
         count <- if count = buffer.Length then count else count + 1
-        head <- if head + 1 < buffer.Length then head + 1 else 0
+        let wrapped =
+            if head + 1 < buffer.Length then
+                head <- head + 1
+                false
+            else 
+                head <- 0
+                true
 
         buffer.[head] <- item
-        head = 0
+        wrapped
 
     member _.Reset () =
         version <- -1
         head    <- -1
         count   <-  0
+
+    member _.Head () =
+        if head = -1 then raise (invalidOp "empty collection")
+        else buffer.[head]
                  
     interface IEnumerable<'a> with
         member self.GetEnumerator () =
