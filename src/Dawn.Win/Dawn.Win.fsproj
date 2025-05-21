@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishAot>true</PublishAot>
+    <PublishSingleFile>true</PublishSingleFile>
+    <AssemblyName>Dawn</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <RdXmlFile Include="rd.xml" />
+    <DirectPInvoke Include="SDL3" />
+    <DirectPInvoke Include="FNA3D" />
+    <DirectPInvoke Include="FAudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--<None Include="..\..\libs\FAudio.dll" Link="libs\FAudio.dll">
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\libs\FNA3D.dll" Link="libs\FNA3D.dll">
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	  <None Include="..\..\libs\FNA3D.lib" Link="libs\FNA3D.lib">
+		  <TargetPath>%(Filename)%(Extension)</TargetPath>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\..\libs\SDL3.dll" Link="libs\SDL3.dll">
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	  <None Include="..\..\libs\SDL3.lib" Link="libs\SDL3.lib">
+		  <TargetPath>%(Filename)%(Extension)</TargetPath>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>-->
+    <None Include="FAudio.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="FNA3D.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="SDL3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="App.config" />
+    <Content Include="rd.xml" />
+    <Compile Include="FNADllMap.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+		<NativeLibrary Include="SDL3.lib" />
+		<NativeLibrary Include="FNA3D.lib" />
+		<NativeLibrary Include="FAudio.lib" />
+	</ItemGroup>
+
+	<ItemGroup>
+      <ProjectReference Include="..\Dawn.Core\Dawn.Core.fsproj" />
+  </ItemGroup>
+
+</Project>
