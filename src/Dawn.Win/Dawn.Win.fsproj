@@ -19,26 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<None Include="..\..\libs\FAudio.dll" Link="libs\FAudio.dll">
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\libs\FNA3D.dll" Link="libs\FNA3D.dll">
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-	  <None Include="..\..\libs\FNA3D.lib" Link="libs\FNA3D.lib">
-		  <TargetPath>%(Filename)%(Extension)</TargetPath>
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\libs\SDL3.dll" Link="libs\SDL3.dll">
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-	  <None Include="..\..\libs\SDL3.lib" Link="libs\SDL3.lib">
-		  <TargetPath>%(Filename)%(Extension)</TargetPath>
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>-->
     <None Include="FAudio.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -54,13 +34,13 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
-	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
-		<NativeLibrary Include="SDL3.lib" />
-		<NativeLibrary Include="FNA3D.lib" />
-		<NativeLibrary Include="FAudio.lib" />
-	</ItemGroup>
+    <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+        <NativeLibrary Include="SDL3.lib" />
+        <NativeLibrary Include="FNA3D.lib" />
+        <NativeLibrary Include="FAudio.lib" />
+    </ItemGroup>
 
-	<ItemGroup>
+    <ItemGroup>
       <ProjectReference Include="..\Dawn.Core\Dawn.Core.fsproj" />
   </ItemGroup>
 

@@ -1,15 +1,24 @@
 ﻿namespace Dawn.Core
 
 open System
+open System.IO
 open System.Diagnostics
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Input
 open Microsoft.Xna.Framework.Graphics
 
+open FontStashSharp
+
 type DawnGame () as self =
     inherit Game ()
 
+    let mutable state = Types.StartScreen
+
     let gdm = new GraphicsDeviceManager (self)
+
+    let fontSystem = new FontSystem()
+    let mutable spriteBatch: SpriteBatch = Unchecked.defaultof<SpriteBatch>
+
     do
         gdm.PreferredBackBufferWidth    <- 1280
         gdm.PreferredBackBufferHeight   <- 720
@@ -17,6 +26,15 @@ type DawnGame () as self =
     override self.Initialize () = 
         base.IsMouseVisible <- false
         base.IsFixedTimeStep <- true
+
+        fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
+
+        // dirty :(
+        spriteBatch <-  new SpriteBatch(gdm.GraphicsDevice)
+
+        let fps = new FrameCounter (self, fontSystem, spriteBatch)
+        base.Components.Add fps
+
         base.Initialize ()
 
     override self.LoadContent () =
