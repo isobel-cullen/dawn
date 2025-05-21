@@ -18,6 +18,7 @@ type DawnGame () as self =
 
     let fontSystem = new FontSystem()
     let mutable spriteBatch: SpriteBatch = Unchecked.defaultof<SpriteBatch>
+    let mutable fps: IGameComponent = Unchecked.defaultof<IGameComponent>
 
     do
         gdm.PreferredBackBufferWidth    <- 1280
@@ -28,24 +29,28 @@ type DawnGame () as self =
         base.IsFixedTimeStep <- true
         base.Window.AllowUserResizing <- true
 
-        fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
-
-        // dirty :(
-        spriteBatch <-  new SpriteBatch(gdm.GraphicsDevice)
-
-        let fps = new FrameCounter (self, fontSystem, spriteBatch)
-        base.Components.Add fps
-
         base.Initialize ()
 
     override self.LoadContent () =
+        fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
+
+        spriteBatch <-  new SpriteBatch(gdm.GraphicsDevice)
+
+
+        fps <- new FrameCounter (self, fontSystem, spriteBatch)
+        fps.Initialize ()
+        base.Components.Add fps
+
         base.LoadContent ()
 
     override self.UnloadContent () =
+        if fps <> null then base.Components.Remove fps |> ignore
         base.UnloadContent ()
 
     override self.Update (gameTime: GameTime): unit = 
         let keyboard = Keyboard.GetState ()
+
+        if keyboard.IsKeyDown Keys.Escape then self.Exit ()
 
         for key in keyboard.GetPressedKeys () do
             Console.WriteLine(key.ToString() + " was pressed")

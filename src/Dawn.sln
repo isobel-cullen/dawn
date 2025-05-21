@@ -11,6 +11,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Dawn.Core", "Dawn.Core\Dawn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontStashSharp.FNA.Core", "..\deps\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj", "{C23251F4-AD14-4B4F-9621-D3CFA047AD4C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00F609F6-477D-CE32-7C4F-D63FA3DE828B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{C23251F4-AD14-4B4F-9621-D3CFA047AD4C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D683DCE3-389B-4AA1-9EF1-7D134DC189D6}

@@ -3,32 +3,40 @@
 open FontStashSharp
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
+open System
 
 type FrameCounter (game, fonts: FontSystem, sprites: SpriteBatch) =
     inherit DrawableGameComponent (game)
 
-    let fontSize = 32f
+    let fontSize = 24f
     let buffer = CircularBuffer.create 60
-    let font24 = fonts.GetFont(fontSize)
-
-    let getPosition () = 
-        new Vector2(float32 game.Window.ClientBounds.Width - fontSize, 0f) 
+    let font = fonts.GetFont(fontSize)
 
     let mutable framerate = 0.0
-    let mutable position = getPosition ()
+    let mutable position = Vector2.Zero
 
-    do 
-        game.Window.ClientSizeChanged.Add (fun _ -> position <- getPosition ())
+    let updatePosition _ = 
+        position <-  new Vector2(float32 game.Window.ClientBounds.Width - fontSize, 0f)
 
-    override self.LoadContent (): unit = 
-        base.LoadContent()
+    do updatePosition ()
+
+    let mutable clientSizeChanged: IDisposable = Unchecked.defaultof<IDisposable>
+
+    override self.Initialize (): unit = 
+        clientSizeChanged <- game.Window.ClientSizeChanged.Subscribe updatePosition
+        base.Initialize ()
+
+    override self.Dispose (disposing: bool): unit = 
+        if clientSizeChanged <> null then clientSizeChanged.Dispose ()
+        base.Dispose(disposing: bool)
 
     override self.Draw (gameTime: GameTime): unit = 
         if buffer.Push gameTime.ElapsedGameTime.TotalSeconds then
             framerate <- truncate (1.0 / (Seq.average buffer))
 
-        sprites.Begin ()
-        sprites.DrawString(font24, (string framerate), position, Color.Violet) |> ignore
-        sprites.End ()
+        if self.Visible then
+            sprites.Begin ()
+            sprites.DrawString(font, (string framerate), position, Color.Violet) |> ignore
+            sprites.End ()
 
         base.Draw(gameTime: GameTime)
