@@ -26,6 +26,7 @@ type DawnGame () as self =
     override self.Initialize () = 
         base.IsMouseVisible <- false
         base.IsFixedTimeStep <- true
+        base.Window.AllowUserResizing <- true
 
         fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
 
