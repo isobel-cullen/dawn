@@ -11,6 +11,7 @@
     </Content>
     <Compile Include="CircularBuffer.fs" />
     <Compile Include="Types.fs" />
+    <Compile Include="EngineTypes.fs" />
     <Compile Include="FrameCounter.fs" />
     <Compile Include="DawnGame.fs" />
   </ItemGroup>

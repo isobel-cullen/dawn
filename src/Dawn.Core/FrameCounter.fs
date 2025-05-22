@@ -12,13 +12,13 @@ type FrameCounter (game, fonts: FontSystem, sprites: SpriteBatch) =
     let buffer = CircularBuffer.create 60
     let font = fonts.GetFont(fontSize)
 
-    let mutable framerate = 0.0
+    let mutable framerate = String.Empty
     let mutable position = Vector2.Zero
 
     let updatePosition _ = 
         position <-  new Vector2(float32 game.Window.ClientBounds.Width - fontSize, 0f)
 
-    do updatePosition ()
+    //do updatePosition ()
 
     let mutable clientSizeChanged: IDisposable = Unchecked.defaultof<IDisposable>
 
@@ -32,11 +32,11 @@ type FrameCounter (game, fonts: FontSystem, sprites: SpriteBatch) =
 
     override self.Draw (gameTime: GameTime): unit = 
         if buffer.Push gameTime.ElapsedGameTime.TotalSeconds then
-            framerate <- truncate (1.0 / (Seq.average buffer))
+            framerate <- truncate (1.0 / (Seq.average buffer)) |> string
 
         if self.Visible then
             sprites.Begin ()
-            sprites.DrawString(font, (string framerate), position, Color.Violet) |> ignore
+            sprites.DrawString(font, framerate, position, Color.Violet) |> ignore
             sprites.End ()
 
         base.Draw(gameTime: GameTime)

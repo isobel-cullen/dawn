@@ -7,6 +7,7 @@ open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Input
 open Microsoft.Xna.Framework.Graphics
 
+open Dawn.Core.Engine
 open FontStashSharp
 
 type DawnGame () as self =
@@ -19,6 +20,7 @@ type DawnGame () as self =
     let fontSystem = new FontSystem()
     let mutable spriteBatch: SpriteBatch = Unchecked.defaultof<SpriteBatch>
     let mutable fps: IGameComponent = Unchecked.defaultof<IGameComponent>
+    let input = InputHandler ()
 
     do
         gdm.PreferredBackBufferWidth    <- 1280
@@ -38,7 +40,7 @@ type DawnGame () as self =
 
 
         fps <- new FrameCounter (self, fontSystem, spriteBatch)
-        fps.Initialize ()
+        fps.Initialize () // feel like this should be called for me but w/e
         base.Components.Add fps
 
         base.LoadContent ()
@@ -48,12 +50,10 @@ type DawnGame () as self =
         base.UnloadContent ()
 
     override self.Update (gameTime: GameTime): unit = 
-        let keyboard = Keyboard.GetState ()
+        input.Update (Keyboard.GetState ())
 
-        if keyboard.IsKeyDown Keys.Escape then self.Exit ()
+        if input.HasPressEnded Keys.Escape then self.Exit ()
 
-        for key in keyboard.GetPressedKeys () do
-            Console.WriteLine(key.ToString() + " was pressed")
 
         base.Update(gameTime: GameTime)
 
