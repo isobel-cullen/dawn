@@ -31,17 +31,16 @@ type DawnGame () as self =
         base.IsFixedTimeStep <- true
         base.Window.AllowUserResizing <- true
 
+        fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
+        spriteBatch <-  new SpriteBatch(gdm.GraphicsDevice)
+        
+        fps <- new FrameCounter (self, fontSystem, spriteBatch)
+        base.Components.Add fps
+
         base.Initialize ()
 
     override self.LoadContent () =
-        fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
 
-        spriteBatch <-  new SpriteBatch(gdm.GraphicsDevice)
-
-
-        fps <- new FrameCounter (self, fontSystem, spriteBatch)
-        fps.Initialize () // feel like this should be called for me but w/e
-        base.Components.Add fps
 
         base.LoadContent ()
 

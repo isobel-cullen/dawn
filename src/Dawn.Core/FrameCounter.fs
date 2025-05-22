@@ -10,7 +10,7 @@ type FrameCounter (game, fonts: FontSystem, sprites: SpriteBatch) =
 
     let fontSize = 24f
     let buffer = CircularBuffer.create 60
-    let font = fonts.GetFont(fontSize)
+    let mutable font = Unchecked.defaultof<DynamicSpriteFont>
 
     let mutable framerate = String.Empty
     let mutable position = Vector2.Zero
@@ -23,6 +23,7 @@ type FrameCounter (game, fonts: FontSystem, sprites: SpriteBatch) =
     let mutable clientSizeChanged: IDisposable = Unchecked.defaultof<IDisposable>
 
     override self.Initialize (): unit = 
+        font <- fonts.GetFont(fontSize)
         clientSizeChanged <- game.Window.ClientSizeChanged.Subscribe updatePosition
         base.Initialize ()
 
