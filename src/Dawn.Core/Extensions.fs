@@ -14,3 +14,4 @@ module Color =
         let blue    = Int32.Parse(hex[4..5], NumberStyles.HexNumber)
         Color(red, green, blue)
 
+    let WithAlpha a (c: Color) = Color(int32 c.R, int32 c.G, int32 c.B, a)

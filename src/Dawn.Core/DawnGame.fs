@@ -24,16 +24,11 @@ type DawnGame () as self =
     let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
     let mutable fps         = Unchecked.defaultof<IGameComponent>
 
-    let pong = SlimePong input
+    let pong = SlimePong (fontSystem, input)
 
     do
         gdm.PreferredBackBufferWidth    <- 1280
         gdm.PreferredBackBufferHeight   <- 720
-
-
-    let listeners = ResizeArray ()
-    let onClientSizeChanged args =
-        for x in listeners do x args
    
     override self.Initialize () = 
         base.IsMouseVisible <- false
@@ -71,7 +66,7 @@ type DawnGame () as self =
         base.Update gameTime
 
     override self.Draw (gameTime: GameTime) =
-        base.GraphicsDevice.Clear (Color.BlanchedAlmond)
+        base.GraphicsDevice.Clear (Palette.Solarized.Background)
 
         spriteBatch.Begin(
             SpriteSortMode.Deferred,

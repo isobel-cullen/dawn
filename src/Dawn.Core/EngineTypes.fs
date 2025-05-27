@@ -36,25 +36,29 @@ type InputHandler () =
     let mutable previous = Unchecked.defaultof<KeyboardState>
     let mutable current  = Unchecked.defaultof<KeyboardState>
 
-    let pressStarted = ResizeArray<Keys> ()
-    let pressEnded   = ResizeArray<Keys> ()
+    let pressed     = ResizeArray<Keys> ()
+    let released    = ResizeArray<Keys> ()
+    let held        = ResizeArray<Keys> ()         
 
     member _.Update newState =
         previous <- current
         current  <- newState
 
-        pressStarted.Clear ()
-        pressEnded.Clear ()
+        pressed.Clear ()
+        released.Clear ()
+        held.Clear ()
 
         let pKeys = previous.GetPressedKeys ()
         let cKeys = current.GetPressedKeys ()
 
-        for k in cKeys do if not (Array.contains k pKeys) then pressStarted.Add k 
-        for k in pKeys do if not (Array.contains k cKeys) then pressEnded.Add k
+        for k in cKeys do if Array.contains k pKeys then held.Add k else pressed.Add k
+        for k in pKeys do if not (Array.contains k cKeys) then released.Add k
 
+    member _.Pressed () = current.GetPressedKeys ()
     member _.IsKeyDown key = current.IsKeyDown key
-    member _.HasBeenPressed key = pressStarted.Contains key
-    member _.HasBeenReleased key   = pressEnded.Contains key
+    member _.HasBeenPressed key = pressed.Contains key
+    member _.HasBeenReleased key   = released.Contains key
+    member _.IsHeld key = held.Contains key
 
 type VirtualScreen (width, height) =
     let mutable bufferWidth     = 0
