@@ -18,8 +18,6 @@ type FrameCounter (game, fonts: FontSystem, sprites: SpriteBatch) =
     let updatePosition _ = 
         position <-  new Vector2(float32 game.Window.ClientBounds.Width - fontSize, 0f)
 
-    //do updatePosition ()
-
     let mutable clientSizeChanged: IDisposable = Unchecked.defaultof<IDisposable>
 
     override self.Initialize (): unit = 

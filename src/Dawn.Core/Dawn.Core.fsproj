@@ -6,12 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Content\clover-sans.ttf">
+    <Content Include="Content\Fonts\clover-sans.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Sprites\blue_slime.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sprites\paddle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Prelude.fs" />
+    <Compile Include="Extensions.fs" />
     <Compile Include="CircularBuffer.fs" />
-    <Compile Include="Types.fs" />
     <Compile Include="EngineTypes.fs" />
+    <Compile Include="Types.fs" />
     <Compile Include="FrameCounter.fs" />
     <Compile Include="DawnGame.fs" />
   </ItemGroup>

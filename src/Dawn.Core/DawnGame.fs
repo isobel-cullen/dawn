@@ -7,41 +7,55 @@ open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Input
 open Microsoft.Xna.Framework.Graphics
 
+open Dawn.Game.Types
 open Dawn.Core.Engine
 open FontStashSharp
 
 type DawnGame () as self =
     inherit Game ()
 
-    let mutable state = Types.StartScreen
-
     let gdm = new GraphicsDeviceManager (self)
 
-    let fontSystem = new FontSystem()
-    let mutable spriteBatch: SpriteBatch = Unchecked.defaultof<SpriteBatch>
-    let mutable fps: IGameComponent = Unchecked.defaultof<IGameComponent>
     let input = InputHandler ()
+    let fontSystem = new FontSystem ()
+    let screen = VirtualScreen (640, 360)
+
+    let mutable contentManager     = Unchecked.defaultof<Content.ContentManager>
+    let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
+    let mutable fps         = Unchecked.defaultof<IGameComponent>
+
+    let pong = SlimePong input
 
     do
         gdm.PreferredBackBufferWidth    <- 1280
         gdm.PreferredBackBufferHeight   <- 720
+
+
+    let listeners = ResizeArray ()
+    let onClientSizeChanged args =
+        for x in listeners do x args
    
     override self.Initialize () = 
         base.IsMouseVisible <- false
         base.IsFixedTimeStep <- true
         base.Window.AllowUserResizing <- true
 
-        fontSystem.AddFont(File.ReadAllBytes(@"Content\clover-sans.ttf"))
+        self.Window.ClientSizeChanged.Add(fun _ -> screen.Update gdm)
+
+        screen.Update gdm
+        fontSystem.AddFont(File.ReadAllBytes(@"Content\Fonts\clover-sans.ttf"))
         spriteBatch <-  new SpriteBatch(gdm.GraphicsDevice)
-        
         fps <- new FrameCounter (self, fontSystem, spriteBatch)
         base.Components.Add fps
 
+        contentManager <- new Content.ContentManager (self.Services)
+        contentManager.RootDirectory <- "Content"
+
+        pong.Initialize ()
         base.Initialize ()
 
     override self.LoadContent () =
-
-
+        pong.LoadContent contentManager
         base.LoadContent ()
 
     override self.UnloadContent () =
@@ -51,12 +65,25 @@ type DawnGame () as self =
     override self.Update (gameTime: GameTime): unit = 
         input.Update (Keyboard.GetState ())
 
-        if input.HasPressEnded Keys.Escape then self.Exit ()
+        if input.HasBeenReleased Keys.Escape then self.Exit ()
 
-
-        base.Update(gameTime: GameTime)
+        pong.Update gameTime
+        base.Update gameTime
 
     override self.Draw (gameTime: GameTime) =
-        base.GraphicsDevice.Clear (Color.LightSeaGreen)
+        base.GraphicsDevice.Clear (Color.BlanchedAlmond)
+
+        spriteBatch.Begin(
+            SpriteSortMode.Deferred,
+            BlendState.AlphaBlend,
+            SamplerState.LinearClamp,
+            DepthStencilState.None,
+            RasterizerState.CullCounterClockwise,
+            null,
+            screen.Scale )
+
+        pong.Draw (spriteBatch, gameTime)
+
+        spriteBatch.End ()
 
         base.Draw gameTime
